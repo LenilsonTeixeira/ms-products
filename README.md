@@ -1,5 +1,5 @@
 # ms-products
-Reactive Microservice using Spring Webflux with Mongo Reactive Repository
+Reactive Microservice using Spring Webflux and Mongo Reactive Repository
 
 #Requirements
 - Docker installed
