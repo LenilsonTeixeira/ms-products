@@ -1,0 +1,66 @@
+{
+  "configuration": {
+    "status": "warn",
+    "appenders": {
+      "Console": {
+        "name": "ConsoleAppender",
+        "PatternLayout": {
+          "pattern": "%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] [%t] %c{10} - %msg%n"
+        }
+      }
+    },
+    "loggers": {
+      "root": {
+        "level": "info",
+        "AppenderRef": [
+          {
+            "ref": "ConsoleAppender"
+          }
+        ]
+      },
+      "logger": [
+        {
+          "name": "org.apache.kafka",
+          "level": "info",
+          "additivity": "false",
+          "AppenderRef": [
+            {
+              "ref": "ConsoleAppender"
+            }
+          ]
+        },
+        {
+          "name": "org.springframework",
+          "level": "info",
+          "additivity": "false",
+          "AppenderRef": [
+            {
+              "ref": "ConsoleAppender"
+            }
+          ]
+        },
+        {
+          "name": "io.netty.util",
+          "level": "info",
+          "additivity": "false",
+          "AppenderRef": [
+            {
+              "ref": "ConsoleAppender"
+            }
+          ]
+        },
+        {
+          "name": "com.sensedia",
+          "level": "debug",
+          "additivity": "false",
+          "AppenderRef": [
+            {
+              "ref": "ConsoleAppender"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+

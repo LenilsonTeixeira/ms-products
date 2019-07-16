@@ -1,0 +1,57 @@
+version: '3'
+services:
+
+  mongodb-ms-products:
+    image: mongo
+    networks:
+    - ms-network
+    ports:
+    - "27017:27017"
+    container_name: mongodb-ms-products
+
+  zookeeper:
+    container_name: zookeeper
+    networks:
+    - ms-network
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+    - "2181:2181"
+
+  kafka:
+    container_name: kafka
+    networks:
+    - ms-network
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+    - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+    ports:
+    - "9092:9092"
+
+  ms-products:
+    networks:
+    - ms-network
+    image: lts/ms-products
+    container_name: ms-products
+    ports:
+    - "8080:8080"
+    - "8000:8000"
+    environment:
+      SPRING_DATA_MONGODB_MS_PRODUCTS_DATABASE: ms_products
+      SPRING_DATA_MS_PRODUCTS_HOST: mongodb-ms-products
+      SPRING_DATA_MS_PRODUCTS_PORT: 27017
+      JAVA_OPTS: "-Djava.security.egd=file:/dev/./urandom -XX:+UseParallelGC -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000 -Xmx256m"
+    depends_on:
+    - mongodb-ms-products
+
+networks:
+  ms-network:
+    driver: bridge
